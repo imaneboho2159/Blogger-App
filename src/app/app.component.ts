@@ -1,6 +1,7 @@
-import { Component, importProvidersFrom } from '@angular/core';
-import { RouterOutlet } from '@angular/router'; 
+import { Component, importProvidersFrom, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 })
 export class AppComponent {
   title = 'blog-app';
+  http = inject(HttpClient);
+
+  logout(): void{
+    console.log('logout');
+  }
 }
