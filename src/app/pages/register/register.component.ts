@@ -28,7 +28,7 @@ export class RegisterComponent {
     this.authService
       .register(rawForm.email, rawForm.username, rawForm.password)
       .subscribe(() => {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('home');
       });
   }
 }

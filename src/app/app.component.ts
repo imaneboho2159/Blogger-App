@@ -15,6 +15,6 @@ export class AppComponent {
   http = inject(HttpClient);
 
   logout(): void{
-    console.log('logout');
+    console.log('logout')
   }
 }
