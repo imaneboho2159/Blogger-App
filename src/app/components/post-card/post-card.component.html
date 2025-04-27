@@ -1,1 +1,54 @@
-<p>post-card works!</p>
+<div class="min-h-screen bg-gray-100 p-4 sm:p-6 flex flex-wrap gap-4 justify-center">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center p-4 animate-pulse w-full">
+        <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z"></path>
+      </svg>
+        <p class="mt-2 text-gray-700 font-medium">Loading posts...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage && !isLoading" class="text-red-500 text-center p-4 bg-red-50 rounded-lg shadow-sm max-w-sm mx-auto w-full">
+        {{ errorMessage }}
+        <button (click)="loadPosts()" class="ml-4 text-blue-500 underline hover:text-blue-700 transition-colors">Try again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && posts.length === 0 && !errorMessage" class="text-center p-4 text-gray-700 font-medium bg-white rounded-lg shadow-sm max-w-sm mx-auto w-full">
+        No posts available.
+    </div>
+
+    <!-- Post Cards -->
+    <div *ngFor="let post of posts; let i = index" class="w-full sm:w-1/2 max-w-md bg-white rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out animate-card-fade-in border-2 border-transparent bg-gradient-to-r from-blue-100 via-transparent to-blue-100"
+        [style.animation-delay]="i * 150 + 'ms'" tabindex="0" [attr.aria-label]="'Post card for ' + post.title">
+        <!-- Image with Zoom Effect -->
+        <div class="relative overflow-hidden rounded-t-lg">
+            <img [src]="sanitizeImageUrl(post.image)" alt="Image for {{ post.title }}" class="w-full h-32 object-cover transition-transform duration-500 hover:scale-110" (error)="post.image = defaultImage">
+        </div>
+
+        <!-- Card Content -->
+        <div class="p-4 flex flex-col space-y-1">
+            <p class="text-xs text-gray-600 font-semibold uppercase tracking-tight">{{ post.category }}</p>
+            <h2 class="text-lg font-bold text-gray-900 line-clamp-1">{{ post.title }}</h2>
+            <a [routerLink]="['/posts', post.id]" class="text-blue-500 text-sm hover:underline mt-2">Show Details</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes card-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-card-fade-in {
+        animation: card-fade-in 0.6s ease-out forwards;
+    }
+</style>
