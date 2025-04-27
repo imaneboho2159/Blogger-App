@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PostService } from '../../services/post.service.ts.service'; 
+import { PostService } from '../../services/post.service'; 
 
 interface Post {
   id?: string;
@@ -64,19 +64,19 @@ export class PostFormComponent implements OnInit {
       this.postId = params.get('id');
       if (this.postId) {
         this.editing = true;
-       // this.loadPost();
+        this.loadPost();
       }
     });
   }
 
-  // // Fetch the post to edit
-  // loadPost() {
-  //   if (this.postId) {
-  //     this.postService.getPost(this.postId).subscribe((post) => {
-  //       this.post = post;
-  //     });
-  //   }
-  // }
+  // Fetch the post to edit
+  loadPost() {
+    if (this.postId) {
+      this.postService.getPost(this.postId).subscribe((post) => {
+        this.post = post;
+      });
+    }
+  }
 
   // Handle form submission (create or update post)
   submitPost() {

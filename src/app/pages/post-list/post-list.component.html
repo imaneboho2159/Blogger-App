@@ -1,1 +1,65 @@
-<p>post-list works!</p>
+<div class="min-h-screen bg-gray-50 p-6 flex flex-wrap gap-6 justify-center">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center p-4 animate-pulse">
+        <svg class="animate-spin h-8 w-8 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z"></path>
+      </svg>
+        <p class="mt-2 text-gray-600 font-medium">Loading posts...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage && !isLoading" class="text-red-600 text-center p-4 bg-red-50 rounded-lg shadow-sm max-w-md mx-auto">
+        {{ errorMessage }}
+        <button (click)="loadPosts()" class="ml-4 text-blue-600 underline hover:text-blue-800 transition-colors">Try again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && posts.length === 0 && !errorMessage" class="text-center p-4 text-gray-600 font-medium bg-white rounded-lg shadow-sm max-w-md mx-auto">
+        No posts available.
+    </div>
+
+    <!-- Post Cards -->
+    <div *ngFor="let post of posts; let i = index" (click)="viewPost(post.id)" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer w-full max-w-xs sm:max-w-sm md:max-w-md transform animate-fade-in"
+        [style.animation-delay]="i * 100 + 'ms'" tabindex="0" [attr.aria-label]="'Post card for ' + post.title">
+        <!-- Image with Gradient Overlay -->
+        <div class="relative">
+            <img [src]="sanitizeImageUrl(post.image) || 'assets/placeholder-image.jpg'" alt="Image for {{ post.title }}" class="w-full h-48 object-cover" (error)="post.image = 'assets/placeholder-image.jpg'">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+
+        <!-- Card Content -->
+        <div class="p-5 flex flex-col space-y-3">
+            <p class="text-xs text-gray-500 uppercase tracking-wide">{{ post.category }}</p>
+            <h2 class="text-xl font-semibold text-gray-800 line-clamp-2">{{ post.title }}</h2>
+
+            <a [routerLink]="['/posts', post.id]" class="text-blue-600 text-sm font-medium hover:underline">Read more</a>
+
+            <div class="flex justify-between mt-4">
+                <button (click)="editPost(post.id); $event.stopPropagation()" [disabled]="!post.id" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors" [attr.aria-label]="'Edit post ' + post.title">
+            Edit
+          </button>
+                <button (click)="deletePost(post.id); $event.stopPropagation()" [disabled]="!post.id" class="bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors" [attr.aria-label]="'Delete post ' + post.title">
+            Delete
+          </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+    }
+</style>
