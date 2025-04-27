@@ -14,6 +14,7 @@ export class PostCardComponent implements OnInit {
   posts: Post[] = [];
   isLoading = true;
   errorMessage: string | null = null;
+  defaultImage = 'assets/placeholder-image.jpg'; // Define fallback image path
 
   constructor(
     private postService: PostService,
@@ -72,7 +73,9 @@ export class PostCardComponent implements OnInit {
     }
   }
 
-  sanitizeImageUrl(url: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
+  sanitizeImageUrl(url: string | undefined): SafeUrl {
+    const imageUrl = url || this.defaultImage;
+    console.log('Sanitizing image URL:', imageUrl); // Debugging
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
 }

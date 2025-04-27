@@ -20,18 +20,18 @@
     </div>
 
     <!-- Post Cards -->
-    <div *ngFor="let post of posts; let i = index" (click)="viewPost(post.id)" class="w-full sm:w-1/2 max-w-md bg-white rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out cursor-pointer animate-card-fade-in border-2 border-transparent bg-gradient-to-r from-blue-100 via-transparent to-blue-100"
+    <div *ngFor="let post of posts; let i = index" class="w-full sm:w-1/2 max-w-md bg-white rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out animate-card-fade-in border-2 border-transparent bg-gradient-to-r from-blue-100 via-transparent to-blue-100"
         [style.animation-delay]="i * 150 + 'ms'" tabindex="0" [attr.aria-label]="'Post card for ' + post.title">
         <!-- Image with Zoom Effect -->
         <div class="relative overflow-hidden rounded-t-lg">
-            <img [src]="sanitizeImageUrl(post.image) || 'assets/placeholder-image.jpg'" alt="Image for {{ post.title }}" class="w-full h-32 object-cover transition-transform duration-500 hover:scale-110" (error)="post.image = 'assets/placeholder-image.jpg'">
+            <img [src]="sanitizeImageUrl(post.image)" alt="Image for {{ post.title }}" class="w-full h-32 object-cover transition-transform duration-500 hover:scale-110" (error)="post.image = defaultImage">
         </div>
 
         <!-- Card Content -->
         <div class="p-4 flex flex-col space-y-1">
             <p class="text-xs text-gray-600 font-semibold uppercase tracking-tight">{{ post.category }}</p>
             <h2 class="text-lg font-bold text-gray-900 line-clamp-1">{{ post.title }}</h2>
-            <a [routerLink]="['/posts', post.id]" class="text-blue-500 text-sm hover:underline mt-2" (click)="$event.stopPropagation()">Show Details</a>
+            <a [routerLink]="['/posts', post.id]" class="text-blue-500 text-sm hover:underline mt-2">Show Details</a>
         </div>
     </div>
 </div>
